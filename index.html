@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlantMood - Seu Jardim Emocional</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
@@ -78,7 +77,7 @@
                 </h2>
 
                 <div id="plantsList" class="space-y-3">
-                    <!-- Plants will be added here -->
+                    <!-- Plants will be added here dynamically -->
                 </div>
             </div>
 
@@ -141,93 +140,12 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Planta</label>
                             <div class="grid grid-cols-4 gap-2" id="plantTypes">
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌱" data-type="Suculenta">
-                                    <div class="text-2xl">🌱</div>
-                                    <div class="text-xs">Suculenta</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌿" data-type="Samambaia">
-                                    <div class="text-2xl">🌿</div>
-                                    <div class="text-xs">Samambaia</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🪴" data-type="Vaso">
-                                    <div class="text-2xl">🪴</div>
-                                    <div class="text-xs">Vaso</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌵" data-type="Cacto">
-                                    <div class="text-2xl">🌵</div>
-                                    <div class="text-xs">Cacto</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌺" data-type="Flor">
-                                    <div class="text-2xl">🌺</div>
-                                    <div class="text-xs">Flor</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌻" data-type="Girassol">
-                                    <div class="text-2xl">🌻</div>
-                                    <div class="text-xs">Girassol</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌹" data-type="Rosa">
-                                    <div class="text-2xl">🌹</div>
-                                    <div class="text-xs">Rosa</div>
-                                </button>
-                                <button type="button"
-                                    class="plant-type-btn p-3 border-2 border-gray-200 rounded-lg hover:border-green-400 transition-colors text-center"
-                                    data-emoji="🌿" data-type="Ervas">
-                                    <div class="text-2xl">🌿</div>
-                                    <div class="text-xs">Ervas</div>
-                                </button>
+                                <!-- Plant Types Buttons -->
+                                <!-- Add plant type buttons dynamically with JS if needed -->
                             </div>
                         </div>
                     </div>
 
                     <div class="flex gap-3 mt-6">
                         <button onclick="saveNewPlant()"
-                            class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Adicionar</button>
-                        <button onclick="closeAddPlant()"
-                            class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition-colors">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal for Journal -->
-        <div id="journalModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 max-w-sm mx-auto">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
-                    <h3 class="text-xl font-semibold mb-4 flex items-center">
-                        <span class="text-2xl mr-2">📝</span>
-                        Diário Emocional
-                    </h3>
-                    <textarea id="journalText"
-                        placeholder="Como foi seu dia com suas plantas? Escreva seus pensamentos..."
-                        class="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
-                    <div class="flex gap-3 mt-4">
-                        <button onclick="saveJournal()"
-                            class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Salvar</button>
-                        <button onclick="closeJournal()"
-                            class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition-colors">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="/src/controller/indexController.js"></script>
-    <script>
-        (function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9803bc15947f4468',t:'MTc1ODA2MTA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();
-    </script>
-</body>
-
-</html>
+                            class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Adicionar
