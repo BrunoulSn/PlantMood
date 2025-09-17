@@ -140,8 +140,6 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Planta</label>
                             <div class="grid grid-cols-4 gap-2" id="plantTypes">
-                                <!-- Plant Types Buttons -->
-                                <!-- Add plant type buttons dynamically with JS if needed -->
                             </div>
                         </div>
                     </div>
@@ -149,3 +147,75 @@
                     <div class="flex gap-3 mt-6">
                         <button onclick="saveNewPlant()"
                             class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Adicionar
+                            <button onclick="saveNewPlant()"
+                                class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Adicionar
+                                Planta</button>
+                            <button onclick="closeAddPlant()"
+                                class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition-colors">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Journal -->
+        <div id="journalModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 max-w-sm mx-auto">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📝</span>
+                        Novo Diário
+                    </h3>
+
+                    <div>
+                        <label for="journalText" class="block text-sm font-medium text-gray-700 mb-2">Como foi seu
+                            dia?</label>
+                        <textarea id="journalText" placeholder="Escreva sobre seu dia ou algo que deseja registrar..."
+                            rows="5"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="saveJournal()"
+                            class="flex-1 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Salvar</button>
+                        <button onclick="closeJournal()"
+                            class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition-colors">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification (Dynamic) -->
+        <div id="notification"
+            class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transform translate-y-[-20px] transition-all duration-300 z-50">
+            Mensagem de Notificação
+        </div>
+
+        <!-- Custom Styles for Floating Button & Pulse Animation -->
+        <style>
+            .floating-btn {
+                background-color: #f56565;
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(245, 101, 101, 0.7);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                    box-shadow: 0 0 15px 5px rgba(245, 101, 101, 0.5);
+                }
+
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(245, 101, 101, 0);
+                }
+            }
+        </style>
+
+    </div>
+</body>
+
+</html>
