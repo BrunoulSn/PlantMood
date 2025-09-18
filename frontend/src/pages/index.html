@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlantMood - Seu Jardim Emocional</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="frontend/src/css/indexStyle.css>
+    <link rel="stylesheet" href="../css/indexStyle.css>">
 </head>
 
-<body class="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
+<body class="bg-gradient-to-br from-green-700 via-green-400 to-green-700">
     <div class="max-w-sm mx-auto bg-white min-h-screen relative overflow-hidden">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-green-400 to-blue-500 p-6 text-white">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">PlantMood</h1>
@@ -78,7 +78,8 @@
                 </h2>
 
                 <div id="plantsList" class="space-y-3">
-                    <!-- Plants will be added here -->
+                    
+
                 </div>
             </div>
 
@@ -103,19 +104,19 @@
         <!-- Bottom Navigation -->
         <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 max-w-sm mx-auto">
             <div class="flex justify-around py-3">
-                <button class="nav-item active flex flex-col items-center" onclick="showHome()">
+                <button class="nav-item active flex flex-col items-center" onclick="loadPage('index')">
                     <span class="text-2xl">🏠</span>
                     <span class="text-xs mt-1">Início</span>
                 </button>
-                <button class="nav-item flex flex-col items-center" onclick="showGarden()">
+                <button class="nav-item flex flex-col items-center" onclick="loadPage('garden')">
                     <span class="text-2xl">🌱</span>
                     <span class="text-xs mt-1">Jardim</span>
                 </button>
-                <button class="nav-item flex flex-col items-center" onclick="showStats()">
+                <button class="nav-item flex flex-col items-center" onclick="loadPage('stats')">
                     <span class="text-2xl">📊</span>
                     <span class="text-xs mt-1">Stats</span>
                 </button>
-                <button class="nav-item flex flex-col items-center" onclick="showProfile()">
+                <button class="nav-item flex flex-col items-center" onclick="loadPage('profile')">
                     <span class="text-2xl">👤</span>
                     <span class="text-xs mt-1">Perfil</span>
                 </button>
@@ -224,7 +225,7 @@
             </div>
         </div>
     </div>
-    <script src="frontend/src/controller/indexController.js"></script>
+    <script src="../controller/indexController.js"></script>
     <script>
         (function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9803bc15947f4468',t:'MTc1ODA2MTA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();
     </script>
