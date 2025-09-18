@@ -229,7 +229,6 @@
         // Navigation functions
         function showHome() {
             updateNavigation('home');
-            // Home content is already visible
         }
 
         function showGarden() {
