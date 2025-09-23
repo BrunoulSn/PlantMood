@@ -226,35 +226,59 @@ function showNotification(message) {
     }, 3000);
 }
 
-// Navigation functions
-// Função para carregar o conteúdo da página
-// Função para carregar o conteúdo da página
-function loadPage(page) {
-    const mainContent = document.getElementById('mainContent');
-    
-    // Ajuste o caminho para a pasta 'pages'
-    fetch(`frontend/src/pages/${page}.html`)
-        .then(response => response.text())
-        .then(data => {
-            mainContent.innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Erro ao carregar a página:', error);
-            mainContent.innerHTML = '<p>Ocorreu um erro ao carregar o conteúdo.</p>';
-        });
+const sections = {
+    index: `
+        <!-- Conteúdo da Home (copie de homeSection) -->
+        <div>
+            <!-- Mood Check-in -->
+            <!-- ... -->
+            <!-- Minhas Plantas -->
+            <!-- ... -->
+            <!-- Dica do Dia -->
+            <!-- ... -->
+        </div>
+    `,
+    garden: `
+        <div>
+            <h2>Jardim</h2>
+            <!-- Conteúdo do jardim -->
+        </div>
+    `,
+    stats: `
+        <div>
+            <h2>Stats</h2>
+            <!-- Conteúdo de estatísticas -->
+        </div>
+    `,
+    profile: `
+        <div>
+            <h2>Perfil</h2>
+            <!-- Conteúdo do perfil -->
+        </div>
+    `
+};
 
-    updateNavigation(page);  // Atualiza a navegação ativa
+function loadPage(button) {
+    const page = button.getAttribute('data-page');
+    const sections = ['homeSection', 'gardenSection', 'statsSection', 'profileSection'];
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+
+    const activeSection = document.getElementById(page + 'Section');
+    if (activeSection) activeSection.classList.remove('hidden');
+
+    updateNavigation(page);
 }
+
 
 
 // Função para atualizar o estado da navegação
 function updateNavigation(page) {
-    const activeLink = document.querySelector('nav button.active');
-    if (activeLink) {
-        activeLink.classList.remove('active');
-    }
-    const newActiveLink = document.querySelector(`nav button[onclick="loadPage('${page}')"]`);
-    newActiveLink.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+    const btn = document.querySelector(`.nav-item[onclick="loadPage('${page}')"]`);
+    if (btn) btn.classList.add('active');
 }
 
 
@@ -292,4 +316,17 @@ function exportData() {
 }
 
 // Initialize app
-loadPlants();
+document.addEventListener('DOMContentLoaded', function () {
+    // Set current date
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit'
+    });
+
+    // Set daily tip
+    const today = new Date().getDate();
+    document.getElementById('dailyTip').textContent = tips[today % tips.length];
+
+    // Inicializa plantas
+    loadPlants();
+});
