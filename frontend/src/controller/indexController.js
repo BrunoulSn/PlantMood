@@ -258,29 +258,143 @@ const sections = {
     `
 };
 
-function loadPage(button) {
-    const page = button.getAttribute('data-page');
-    const sections = ['homeSection', 'gardenSection', 'statsSection', 'profileSection'];
-    sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
+// Helper: esconde todas as seções que terminam com "Section"
+function hideAllSections() {
+    const sections = document.querySelectorAll('[id$="Section"]');
+    sections.forEach(s => {
+        s.style.display = 'none';
     });
+}
 
-    const activeSection = document.getElementById(page + 'Section');
-    if (activeSection) activeSection.classList.remove('hidden');
+// Tenta mostrar a seção correspondente ao page (index -> homeSection).
+// Se a seção existir, retorna o elemento; se não existir, retorna null.
+function getSectionElementForPage(page) {
+    const targetId = (page === 'index' ? 'homeSection' : `${page}Section`);
+    return document.getElementById(targetId);
+}
+
+// Carrega conteúdo remoto (arquivo .html em same folder pages) apenas uma vez por seção.
+// Usa caminho relativo ao arquivo index.html (./<page>.html).
+function loadRemoteSectionIfNeeded(page, el) {
+    if (!el) return Promise.resolve();
+    // evita recarregar se já carregado
+    if (el.dataset.remoteLoaded === 'true') return Promise.resolve();
+    const url = `${page}.html`; // index.html está em frontend/src/pages/, então 'garden.html' resolve
+    return fetch(url, {cache: 'no-store'})
+        .then(response => {
+            if (!response.ok) throw new Error('not found');
+            return response.text();
+        })
+        .then(html => {
+            // se a seção já tem conteúdo relevante, não sobrescreve completamente:
+            // se estiver vazia ou pequeno, injeta; caso contrário, anexa.
+            const trimmed = (el.innerHTML || '').trim();
+            if (!trimmed || trimmed.length < 20 || trimmed === '<!-- content -->') {
+                el.innerHTML = html;
+            } else {
+                // opcional: append if you want both
+                // el.insertAdjacentHTML('beforeend', html);
+            }
+            el.dataset.remoteLoaded = 'true';
+        })
+        .catch(err => {
+            // falha ao buscar: deixar a seção como está (não sobrescrever)
+            console.warn('Não foi possível carregar', url, err);
+        });
+}
+
+// Padroniza navegação por nome de página (recebe string)
+function loadPage(page) {
+    if (!page || typeof page !== 'string') return;
+
+    hideAllSections();
+
+    const sectionEl = getSectionElementForPage(page);
+    if (sectionEl) {
+        // mostra a seção (mesmo que vazia) e tenta popular com o arquivo correspondente
+        sectionEl.style.display = '';
+        // protege e carrega conteúdo remoto apenas se necessário (garden.html, stats.html, profile.html)
+        loadRemoteSectionIfNeeded(page, sectionEl).then(() => {
+            // depois de carregar, executa inits específicos se necessário
+            if (page === 'garden' && typeof initGarden === 'function') initGarden();
+            if (page === 'stats' && typeof initStats === 'function') initStats();
+            if (page === 'profile' && typeof initProfile === 'function') initProfile();
+        });
+        // limpa mainContent caso exista para evitar conteúdo residual
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) mainContent.innerHTML = '';
+    } else {
+        // seção não existe no DOM: usa mainContent (templates internos ou fetch)
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            // tenta carregar arquivo ./<page>.html
+            fetch(`${page}.html`, {cache: 'no-store'})
+                .then(resp => {
+                    if (!resp.ok) throw new Error('Página não encontrada');
+                    return resp.text();
+                })
+                .then(html => mainContent.innerHTML = html)
+                .catch(() => mainContent.innerHTML = '<p>Conteúdo da página não encontrado.</p>');
+        }
+    }
 
     updateNavigation(page);
+
+    // inicializações comuns
+    if (page === 'index') {
+        if (typeof loadPlants === 'function') loadPlants();
+        const currentDateEl = document.getElementById('currentDate');
+        if (currentDateEl) currentDateEl.textContent = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        const dailyTipEl = document.getElementById('dailyTip');
+        if (dailyTipEl) dailyTipEl.textContent = tips[new Date().getDate() % tips.length];
+    }
 }
 
-
-
-// Função para atualizar o estado da navegação
+// -- Atualiza botão ativo (usa data-page; popula data-page se estiver faltando) --
 function updateNavigation(page) {
-    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-    const btn = document.querySelector(`.nav-item[onclick="loadPage('${page}')"]`);
-    if (btn) btn.classList.add('active');
+    const navButtons = document.querySelectorAll('.nav-item');
+    navButtons.forEach(btn => {
+        btn.classList.remove('active');
+        // se não tiver data-page, tenta extrair do onclick (formato loadPage('name'))
+        if (!btn.dataset.page) {
+            const onclick = btn.getAttribute('onclick') || '';
+            const m = onclick.match(/loadPage\(['"]?([\w-]+)['"]?\)/);
+            if (m) btn.dataset.page = m[1];
+        }
+    });
+
+    // marca o botão correspondente
+    const activeBtn = document.querySelector(`.nav-item[data-page="${page}"]`) ||
+                      document.querySelector(`.nav-item[data-page="index"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 }
 
+// Inicialização somente após DOM pronto
+document.addEventListener('DOMContentLoaded', function () {
+    // garante que botões de nav tenham data-page para updateNavigation
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        if (!btn.dataset.page) {
+            const onclick = btn.getAttribute('onclick') || '';
+            const m = onclick.match(/loadPage\(['"]?([\w-]+)['"]?\)/);
+            if (m) btn.dataset.page = m[1];
+        }
+    });
+
+    // segurança: somente escreve se os elementos existem
+    const currentDateEl = document.getElementById('currentDate');
+    if (currentDateEl) {
+        currentDateEl.textContent = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    }
+    const dailyTipEl = document.getElementById('dailyTip');
+    if (dailyTipEl) {
+        dailyTipEl.textContent = tips[new Date().getDate() % tips.length];
+    }
+
+    if (typeof loadPlants === 'function') loadPlants();
+
+    // carrega a home por padrão
+    loadPage('index');
+});
 
 function clearData() {
     if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
